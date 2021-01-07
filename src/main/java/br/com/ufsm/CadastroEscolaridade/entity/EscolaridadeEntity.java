@@ -35,6 +35,13 @@ public class EscolaridadeEntity {
     public EscolaridadeEntity() {
     }
 
+    /*public EscolaridadeEntity(EscolaridadeEntity escolaridade) {
+        this.nome = escolaridade.getNome();
+        this.dataInicial = escolaridade.getDataInicial();
+        this.dataFinal = escolaridade.getDataFinal();
+        this.instituicao = escolaridade.getInstituicao();
+    }*/
+
     public EscolaridadeEntity(Integer id, String nome, LocalDate dataInicial, LocalDate dataFinal, String instituicao) {
         this.id = id;
         this.nome = nome;

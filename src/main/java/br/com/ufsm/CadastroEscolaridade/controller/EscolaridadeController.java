@@ -1,10 +1,14 @@
 package br.com.ufsm.CadastroEscolaridade.controller;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import br.com.ufsm.CadastroEscolaridade.controller.dto.EscolaridadeDTO;
 import br.com.ufsm.CadastroEscolaridade.entity.EscolaridadeEntity;
+import br.com.ufsm.CadastroEscolaridade.model.Escolaridade;
 import br.com.ufsm.CadastroEscolaridade.repository.EscolaridadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -25,46 +31,52 @@ import javax.validation.Valid;
 public class EscolaridadeController {
 
     @Autowired
-    EscolaridadeRepository escolaridadeRepository;
-    EscolaridadeEntity escolaridadeEntity;
+    private EscolaridadeRepository escolaridadeRepository;
+    private EscolaridadeEntity escolaridadeEntity;
 
-    @GetMapping
+    @GetMapping //Não devolve DTO se não não sei a id
     public List<EscolaridadeEntity> listar(){
         List<EscolaridadeEntity> escolaridadeEntityList = escolaridadeRepository.findAll();
         return escolaridadeEntityList;
     }
 
     @GetMapping("/{id}")
-    public EscolaridadeEntity listarPorId(@PathVariable(value = "id") Integer id){
-        EscolaridadeEntity escolaridadeEntity = escolaridadeRepository.findById(id).get();
-        return escolaridadeEntity;
+    public  ResponseEntity<EscolaridadeDTO> listarPorId(@PathVariable(value = "id") Integer id){
+        Optional<EscolaridadeEntity> escolaridadeEntity = escolaridadeRepository.findById(id);
+        if(escolaridadeEntity.isPresent()){
+            return ResponseEntity.ok(new EscolaridadeDTO(escolaridadeEntity.get()));
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PostMapping()
-    public EscolaridadeEntity criarEscolaridaed(@RequestBody @Valid EscolaridadeEntity escolaridade) {
+    @PostMapping
+    @Transactional
+    public ResponseEntity<EscolaridadeEntity> criarEscolaridade(@RequestBody @Valid EscolaridadeEntity escolaridade, UriComponentsBuilder uriComponentsBuilder) {
         EscolaridadeEntity escolaridadeSalvo = escolaridadeRepository.save(escolaridade);
-        return escolaridadeSalvo;
+        URI uri = uriComponentsBuilder.path("/escolariade/{id}").buildAndExpand(escolaridade.getId()).toUri();
+        return ResponseEntity.created(uri).body(escolaridade);
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<EscolaridadeEntity> atualizarEscolaridade(@PathVariable(value = "id") Integer id, @RequestBody @Valid EscolaridadeEntity escolaridadeEntity) {
-        EscolaridadeEntity escolaridade = escolaridadeRepository.findById(id).get();
+        Optional<EscolaridadeEntity> escolaridade = escolaridadeRepository.findById(id);
+        if(escolaridade.isPresent()){
+            escolaridade.get().setNome(escolaridadeEntity.getNome());
+            escolaridade.get().setDataInicial(escolaridadeEntity.getDataInicial());
+            escolaridade.get().setDataFinal(escolaridadeEntity.getDataFinal());
+            escolaridade.get().setInstituicao(escolaridadeEntity.getInstituicao());
 
-        escolaridade.setNome(escolaridadeEntity.getNome());
-        escolaridade.setDataInicial(escolaridadeEntity.getDataInicial());
-        escolaridade.setDataFinal(escolaridadeEntity.getDataFinal());
-        escolaridade.setInstituicao(escolaridadeEntity.getInstituicao());
-
-        final EscolaridadeEntity escolaridadeAtualizada = escolaridadeRepository.save(escolaridade);
-        return ResponseEntity.ok(escolaridadeAtualizada);
+            EscolaridadeEntity escolaridadeAtualizada = escolaridadeRepository.save(escolaridade.get());
+            return ResponseEntity.ok(escolaridadeAtualizada);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, Boolean> removerEscolaridade(@PathVariable(value = "id") Integer id){
-        EscolaridadeEntity escolaridade = escolaridadeRepository.findById(id).get();
-        escolaridadeRepository.delete(escolaridade);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("Deletado", Boolean.TRUE);
-        return response;
+    @Transactional
+    public ResponseEntity<?> removerEscolaridade(@PathVariable(value = "id") Integer id) {
+        escolaridadeRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }
