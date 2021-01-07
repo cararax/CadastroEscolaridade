@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/escolaridade")
 public class EscolaridadeController {
@@ -39,13 +41,13 @@ public class EscolaridadeController {
     }
 
     @PostMapping()
-    public EscolaridadeEntity criarEscolaridaed(@RequestBody EscolaridadeEntity escolaridade) {
+    public EscolaridadeEntity criarEscolaridaed(@RequestBody @Valid EscolaridadeEntity escolaridade) {
         EscolaridadeEntity escolaridadeSalvo = escolaridadeRepository.save(escolaridade);
         return escolaridadeSalvo;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EscolaridadeEntity> atualizarEscolaridade(@PathVariable(value = "id") Integer id, @RequestBody EscolaridadeEntity escolaridadeEntity) {
+    public ResponseEntity<EscolaridadeEntity> atualizarEscolaridade(@PathVariable(value = "id") Integer id, @RequestBody @Valid EscolaridadeEntity escolaridadeEntity) {
         EscolaridadeEntity escolaridade = escolaridadeRepository.findById(id).get();
 
         escolaridade.setNome(escolaridadeEntity.getNome());
