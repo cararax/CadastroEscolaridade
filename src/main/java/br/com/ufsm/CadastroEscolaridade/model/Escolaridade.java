@@ -10,7 +10,6 @@ public class Escolaridade {
     private LocalDate dataFinal;
     private String instituicao;
 
-
     public Escolaridade() {
     }
 

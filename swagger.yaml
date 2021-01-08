@@ -1,0 +1,244 @@
+openapi: 3.0.1
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /cadastroEscolaridade/1:
+    get:
+      description: >-
+        Esse método retorna uma única escolaridade previamente cadastrada no
+        banco de dadas.
+      responses:
+        '200':
+          description: Sucesso. Retorna uma escolaridade
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instituicao:
+                    type: string
+                  nome:
+                    type: string
+                  dataInicial:
+                    type: string
+                  dataFinal:
+                    type: string
+              examples:
+                exemplo:
+                  value:
+                    nome: pedro
+                    dataInicial: '2020-01-01'
+                    dataFinal: '2020-10-10'
+                    instituicao: UFSM
+        '400':
+          description: 'Erro: escolaridade nao encontrada'
+        '404':
+          description: 'Erro: escolaridade nao encontrada'
+      servers:
+        - url: 'http://localhost:8080'
+      summary: Listar Escolaridade por Id
+      tags:
+        - Único Item
+    put:
+      description: >-
+        Esse metódo altera o valor de uma escolaridade previamente cadastrada no
+        banco de dados.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instituicao:
+                  type: string
+                nome:
+                  type: string
+                dataInicial:
+                  type: string
+                dataFinal:
+                  type: string
+            examples:
+              exemplo:
+                value: |-
+                  {
+                      "nome": "outro pedro",
+                      "dataInicial": "2021-01-01",
+                      "dataFinal": "2021-10-10",
+                      "instituicao": "outra universidade"
+                  }
+      responses:
+        '200':
+          description: Encontrou a escolaridade e a atualizou com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instituicao:
+                    type: string
+                  nome:
+                    type: string
+                  id:
+                    type: integer
+                  dataInicial:
+                    type: string
+                  dataFinal:
+                    type: string
+              examples:
+                exemplo:
+                  value: >-
+                    {"id":1,"nome":"outro
+                    pedro","dataInicial":"2021-01-01","dataFinal":"2021-10-10","instituicao":"outra
+                    universidade"}
+        '400':
+          description: 'Erro: escolaridade nao encontrada'
+        '404':
+          description: 'Erro: escolaridade nao encontrada'
+      servers:
+        - url: 'http://localhost:8080'
+      tags:
+        - Único Item
+      summary: Alterar Item
+    delete:
+      responses:
+        '200':
+          description: Escolaridade deletada com sucesso
+        '404':
+          description: 'Erro: escolaridade nao encontrada'
+      servers:
+        - url: 'http://localhost:8080'
+      summary: Remover Item
+      tags:
+        - Único Item
+      description: >-
+        Esse método deleta uma escolaridade previamente cadastrada no banco de
+        dados.
+    servers:
+      - url: 'http://localhost:8080'
+  /cadastroEscolaridade:
+    get:
+      description: >-
+        Esse método retorna todas as escolaridades cadastradas no banco de
+        dadas.
+      responses:
+        '200':
+          description: 'Sucesso, retorna todas as escolaridades cadastradas no banco'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                exemplo:
+                  value: >-
+                    [{"id":2,"nome":"patrick","dataInicial":"2010-10-10","dataFinal":"2015-10-10","instituicao":"URFJ"},{"id":1,"nome":"outro
+                    pedro","dataInicial":"2021-01-01","dataFinal":"2021-10-10","instituicao":"outra
+                    universidade"},{"id":4,"nome":"carara","dataInicial":"2005-01-01","dataFinal":"2005-10-10","instituicao":"ufrgs"}]
+        '404':
+          description: 'Erro: escolaridade nao encontrada'
+      servers:
+        - url: 'http://localhost:8080'
+      summary: Listar todos os itens
+      tags:
+        - Múltiplos Itens
+    servers:
+      - url: 'http://localhost:8080'
+  /cadastroEscolaridade/:
+    post:
+      description: >-
+        Esse método cria uma nova entrada no banco de dados, representando uma
+        escolaridade.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instituicao:
+                  type: string
+                nome:
+                  type: string
+                dataInicial:
+                  type: string
+                dataFinal:
+                  type: string
+            examples:
+              exemplo:
+                value: |-
+                  {
+                      "nome": "carara",
+                      "dataInicial": "2005-01-01",
+                      "dataFinal": "2005-10-10",
+                      "instituicao": "ufrgs"
+                  }
+      responses:
+        '201':
+          description: 'Sucesso, escolaridade cadastrada no banco de dados'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  instituicao:
+                    type: string
+                  nome:
+                    type: string
+                  id:
+                    type: integer
+                  dataInicial:
+                    type: string
+                  dataFinal:
+                    type: string
+              examples:
+                exemplo:
+                  value: >-
+                    {"id":4,"nome":"carara","dataInicial":"2005-01-01","dataFinal":"2005-10-10","instituicao":"ufrgs"}
+        '400':
+          description: 'Erro: as datas nao foram informadas corretamente'
+        '404':
+          description: Erro escolaridade nao encontrada
+      servers:
+        - url: 'http://localhost:8080'
+      summary: Inserir Item
+      tags:
+        - Inserção
+    servers:
+      - url: 'http://localhost:8080'
+tags:
+  - description: Metodos que retornam um item
+    name: Único Item
+  - name: Múltiplos Itens
+    description: Operações que retornam varios itens
+info:
+  title: Cadastro De Escolaridade - Serviço REST
+  description: >-
+    Cadastro de Escolaridade é um serviço rest que cadastra dados relacionados a
+    escolaridade de uma pesso. É construido em cima das tecnologias Spring Boot,
+    Spring Data Jpa, PostgreSQL e documentado com Swagger
+  version: '1.0'
+  contact:
+    name: Pedro Carara
+    email: cararax@gmail.com
+  license:
+    url: 'http://www.wtfpl.net/'
+    name: WTFPL
+components:
+  schemas:
+    Escolaridade:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+          format: date
+        dataInicial:
+          type: string
+          format: date
+        dataFinal:
+          type: string
+          format: date
+        instutuicao:
+          type: string
+      description: Modelo que abstrai a escolaridade de uma pessoa

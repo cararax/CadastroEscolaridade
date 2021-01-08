@@ -27,7 +27,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/escolaridade")
+@RequestMapping("/cadastroEscolaridade")
 public class EscolaridadeController {
 
     @Autowired

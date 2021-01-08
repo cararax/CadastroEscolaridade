@@ -25,11 +25,6 @@ public class EscolaridadeDTO {
         this.instituicao = escolaridade.getInstituicao();
     }
 
-  /* public static List<EscolaridadeDTO> converter(List<EscolaridadeEntity> escolaridades) {
-        return escolaridades.stream().map(EscolaridadeDTO::new).collect(Collectors.toList());
-    }*/
-
-
     public static List<EscolaridadeDTO> converter(List<EscolaridadeEntity> escolaridades) {
         return escolaridades.stream().map(EscolaridadeDTO::new).collect(Collectors.toList());
     }

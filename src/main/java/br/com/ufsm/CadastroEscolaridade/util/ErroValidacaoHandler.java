@@ -23,7 +23,6 @@ public class ErroValidacaoHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public List<ErroInputDto> handler(MethodArgumentNotValidException exception){
         List<ErroInputDto> dto = new ArrayList<>();
-
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 
         fieldErrors.forEach(e->{
@@ -31,7 +30,6 @@ public class ErroValidacaoHandler {
             ErroInputDto erro = new ErroInputDto(e.getField(), mensagem);
             dto.add(erro);
         });
-
         return dto;
     }
 }
