@@ -10,7 +10,7 @@ Documentação feita com swagger e pode ser acessada [aqui.](https://app.swagger
 
 ## Para rodar a aplicação
 
-###Banco de dados
+### Banco de dados
 No PostgreSQL crie uma banco de dados chamado "escolaridade" e rode os comandos abaixo para criar a tabela.
 ```bash
 #Para criar a tabela
