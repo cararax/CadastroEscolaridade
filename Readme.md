@@ -1,12 +1,12 @@
 
 # Cadastro Escolaridade - Serviço Rest
 
-Cadastro de Escolaridade é um serviço rest que cadastra dados relacionados a escolaridade de uma pesso. É construido 
+Cadastro de Escolaridade é um serviço rest que cadastra dados relacionados a escolaridade de uma pessoa. É construido 
 em cima das tecnologias Spring Boot, Spring Data Jpa, PostgreSQL e documentado com Swagger.
 
 ## Documentação
 
-Documentação feita com swagger e pode ser acessada [aqui.](https://github.com/cararax) 
+Documentação feita com swagger e pode ser acessada [aqui.](https://app.swaggerhub.com/apis-docs/cararax/CadastroEscolaridade/1.0) 
 
 ## Para rodar a aplicação
 
